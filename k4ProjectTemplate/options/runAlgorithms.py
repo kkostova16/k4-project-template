@@ -7,23 +7,18 @@ from Configurables import (
 from k4FWCore import ApplicationMgr
 from Configurables import EventDataSvc
 
-producer = myProducer("Producer", OutputCollection=["MCParticle"])
+producer = myProducer("Producer", OutputCollection=["MCParticles"])
 
-transformer1 = myTransformer("Transformer1", InputCollection=["MCParticle"], OutputCollection=["NewMCParticle1"])
-transformer2 = myTransformer("Transformer2", InputCollection=["MCParticle"], OutputCollection=["NewMCParticle2"])
+transformer = myTransformer("Transformer", InputCollection=["MCParticles"], 
+                                OutputCollection=["RecoParticles"])
 
-consumer1 = myConsumer("Consumer1", InputCollection=["NewMCParticle1"], Offset=10,)
-consumer2 = myConsumer("Consumer2", InputCollection=["NewMCParticle2"], Offset=200,)
+consumer = myConsumer("Consumer", MCInputCollection=["MCParticles"],
+                                RecoInputCollection = ["RecoParticles"], Offset=10)
 
 ApplicationMgr(
-    TopAlg=[producer, transformer1, transformer2, consumer1, consumer2],
+    TopAlg=[producer, transformer, consumer],
     EvtSel="NONE",
     EvtMax=10,
     ExtSvc=[EventDataSvc("EventDataSvc")],
     OutputLevel=INFO,
 )
-
-producer.setPDG(111)
-
-print(consumer1.getPDG())
-print(consumer2.getPDG())

@@ -14,9 +14,10 @@ struct myProducer final : k4FWCore::Producer<edm4hep::MCParticleCollection()> {
 
   // This is the function that will be called to produce the data
   edm4hep::MCParticleCollection operator()() const override {
-    auto coll = edm4hep::MCParticleCollection();
-    coll.create(1, 2, 3, 4., 5., 6.);
-    coll.create(2, 3, 4, 5., 6., 7.);
+    auto coll = edm4hep::MCParticleCollection(); // Define collection
+    auto particle = coll.create(); // Everything is initialized to 0 (or empty if a vector)
+    particle.setPDG(111);
+
     // We have to return whatever collection type we specified in the
     // template argument
     return coll;
